@@ -297,12 +297,14 @@ SELECT
         WHEN t.requiere_lf = FALSE THEN FALSE
         WHEN t.requiere_lf = TRUE AND lf.id   IS NOT NULL THEN FALSE
         WHEN t.requiere_lf = TRUE AND tlf.id  IS NOT NULL THEN FALSE
+        WHEN t.requiere_lf = TRUE AND titse.id  IS NOT NULL THEN FALSE
         ELSE TRUE
     END AS licencia_pendiente,
     CASE
         WHEN t.requiere_itse = FALSE THEN FALSE
         WHEN t.requiere_itse = TRUE AND i.id    IS NOT NULL THEN FALSE
         WHEN t.requiere_itse = TRUE AND titse.id IS NOT NULL THEN FALSE
+         WHEN t.requiere_itse = TRUE AND tlf.id  IS NOT NULL THEN FALSE
         ELSE TRUE
     END AS itse_pendiente,
     t.fecha_alerta <= CURRENT_DATE AS mostrar_alerta
