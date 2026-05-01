@@ -140,6 +140,7 @@ from .services.inspector import (
     crear_inspector,
     crear_itse_inspector,
     eliminar_inspector,
+    eliminar_itse_inspectores,
     listar_inspectores,
     listar_itse_inspectores,
     obtener_inspector,
@@ -3468,6 +3469,24 @@ class ItseInspectoresView(APIView):
 
         except Exception as e:
             logger.exception('Error al asignar inspector al ITSE pk=%s', pk)
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+    def delete(self, request, pk):
+        """Elimina TODOS los inspectores asignados al certificado ITSE."""
+        try:
+            if not Itse.objects.filter(pk=pk).exists():
+                return Response(
+                    {'error': 'El certificado ITSE no existe.'},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+            eliminados = eliminar_itse_inspectores(pk)
+            return Response({'eliminados': eliminados}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            logger.exception('Error al eliminar inspectores del ITSE pk=%s', pk)
             return Response(
                 {'error': str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,

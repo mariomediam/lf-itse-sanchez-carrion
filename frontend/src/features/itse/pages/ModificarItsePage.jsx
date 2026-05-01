@@ -6,6 +6,7 @@ import SideMenu from '@components/layout/SideMenu'
 import SelectorPersona from '@features/expedientes/components/SelectorPersona'
 import AgregarGiroModal from '@features/licencias/components/AgregarGiroModal'
 import { dashboardApi } from '@api/dashboardApi'
+import { inspectoresApi } from '@api/inspectoresApi'
 import { itseApi } from '@api/itseApi'
 import { personasApi } from '@api/personasApi'
 import useItseStore from '@store/itseStore'
@@ -99,7 +100,11 @@ export default function ModificarItsePage() {
 
   // Catálogos
   const [nivelesRiesgo,    setNivelesRiesgo]    = useState([])
+  const [inspectores,      setInspectores]      = useState([])
   const [loadingCatalogos, setLoadingCatalogos] = useState(true)
+
+  // Inspector asignado
+  const [inspectorId, setInspectorId] = useState('')
 
   // Estado de carga
   const [loadingItse, setLoadingItse] = useState(true)
@@ -149,9 +154,15 @@ export default function ModificarItsePage() {
 
   useEffect(() => {
     setLoadingCatalogos(true)
-    itseApi.getNivelesRiesgo()
-      .then((res) => setNivelesRiesgo(res.data))
-      .catch(() => toast.error('Error al cargar los niveles de riesgo'))
+    Promise.all([
+      itseApi.getNivelesRiesgo(),
+      inspectoresApi.listar(),
+    ])
+      .then(([resNiveles, resInspectores]) => {
+        setNivelesRiesgo(resNiveles.data)
+        setInspectores(resInspectores.data)
+      })
+      .catch(() => toast.error('Error al cargar los catálogos'))
       .finally(() => setLoadingCatalogos(false))
   }, [])
 
@@ -163,9 +174,10 @@ export default function ModificarItsePage() {
     const cargar = async () => {
       setLoadingItse(true)
       try {
-        const [resItse, resGiros] = await Promise.all([
+        const [resItse, resGiros, resInspectoresItse] = await Promise.all([
           itseApi.buscar('ID', id),
           itseApi.getGiros(id),
+          itseApi.getInspectores(id),
         ])
 
         const itse = resItse.data[0]
@@ -206,6 +218,11 @@ export default function ModificarItsePage() {
           nombre:  g.nombre,
         }))
         setGiros(girosFormateados)
+
+        // Inspector asignado (tomamos el primero si existe)
+        if (resInspectoresItse.data.length > 0) {
+          setInspectorId(String(resInspectoresItse.data[0].inspector_id))
+        }
 
         // Titular
         const resTitular = await personasApi.buscar('ID', itse.titular_id)
@@ -283,6 +300,18 @@ export default function ModificarItsePage() {
     setSubmitting(true)
     try {
       await itseApi.modificar(id, payload)
+
+      // Paso 1: eliminar todos los inspectores actuales
+      // Paso 2: asignar el nuevo inspector si se seleccionó uno
+      try {
+        await itseApi.eliminarInspectores(id)
+        if (inspectorId) {
+          await itseApi.crearInspector(id, Number(inspectorId))
+        }
+      } catch {
+        toast.error('El certificado ITSE fue modificado, pero no se pudo actualizar el inspector')
+      }
+
       setBusqueda('ID', String(id))
       toast.success('Certificado ITSE modificado correctamente')
       navigate('/certificados-itse')
@@ -461,6 +490,30 @@ export default function ModificarItsePage() {
                       placeholder="Ej. 00647587"
                       className={inputClass}
                     />
+                  </div>
+                </div>
+
+                {/* Fila 4: Inspector */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1.5">
+                      Inspector
+                    </label>
+                    <select
+                      value={inspectorId}
+                      onChange={(e) => setInspectorId(e.target.value)}
+                      disabled={loadingCatalogos || loadingItse}
+                      className={selectClass}
+                    >
+                      <option value="">
+                        {loadingCatalogos || loadingItse ? 'Cargando...' : '— Sin asignar —'}
+                      </option>
+                      {inspectores.map((insp) => (
+                        <option key={insp.id} value={insp.id}>
+                          {insp.apellido_paterno} {insp.apellido_materno}, {insp.nombres}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
 

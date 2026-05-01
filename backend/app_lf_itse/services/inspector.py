@@ -145,6 +145,24 @@ def listar_itse_inspectores(itse_id: int) -> list[dict]:
         return [dict(zip(columns, row)) for row in cursor.fetchall()]
 
 
+def eliminar_itse_inspectores(itse_id: int) -> int:
+    """
+    Elimina todos los inspectores asignados a un certificado ITSE.
+
+    Parámetros
+    ----------
+    itse_id : int
+        PK del certificado ITSE.
+
+    Retorna
+    -------
+    int
+        Número de registros eliminados.
+    """
+    deleted, _ = ItseInspector.objects.filter(itse_id=itse_id).delete()
+    return deleted
+
+
 def crear_itse_inspector(itse_id: int, inspector_id: int, usuario) -> ItseInspector:
     """
     Asigna un inspector a un certificado ITSE.

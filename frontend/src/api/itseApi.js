@@ -22,6 +22,9 @@ export const itseApi = {
   crearInspector: (itseId, inspectorId) =>
     api.post(`/api/lf-itse/itse/${itseId}/inspectores/`, { inspector_id: inspectorId }),
 
+  eliminarInspectores: (itseId) =>
+    api.delete(`/api/lf-itse/itse/${itseId}/inspectores/`),
+
   verificarExpediente: (numero_expediente, anio) =>
     api.get('/api/lf-itse/itse/verificar-expediente/', {
       params: { numero_expediente, anio },
