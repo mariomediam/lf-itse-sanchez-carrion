@@ -55,6 +55,7 @@ from .serializers import (
     ZonificacionWriteSerializer,
     InspectorSerializer,
     InspectorWriteSerializer,
+    ItseInspectorCreateSerializer,
     PersonaDocumentoListSerializer,
     PersonaSerializer,
     PersonaWriteSerializer,
@@ -137,8 +138,10 @@ from .services.inspector import (
     actualizar_inspector,
     buscar_inspectores,
     crear_inspector,
+    crear_itse_inspector,
     eliminar_inspector,
     listar_inspectores,
+    listar_itse_inspectores,
     obtener_inspector,
 )
 from .services.persona import (
@@ -3409,6 +3412,62 @@ class InspectorBuscarView(APIView):
 
         except Exception as e:
             logger.exception('Error al buscar inspectores')
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
+class ItseInspectoresView(APIView):
+    """
+    GET  /api/lf-itse/itse/<pk>/inspectores/
+        Lista los inspectores asignados al certificado ITSE.
+
+    POST /api/lf-itse/itse/<pk>/inspectores/
+        Asigna un inspector al certificado ITSE.
+        Body: { inspector_id: int }
+
+    Requiere autenticación JWT.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        try:
+            if not Itse.objects.filter(pk=pk).exists():
+                return Response(
+                    {'error': 'El certificado ITSE no existe.'},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+            inspectores = listar_itse_inspectores(pk)
+            return Response(inspectores, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            logger.exception('Error al listar inspectores del ITSE pk=%s', pk)
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+    def post(self, request, pk):
+        serializer = ItseInspectorCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            itse_inspector = crear_itse_inspector(
+                itse_id=pk,
+                inspector_id=serializer.validated_data['inspector_id'],
+                usuario=request.user,
+            )
+            return Response(
+                {'id': itse_inspector.id, 'itse_id': pk,
+                 'inspector_id': itse_inspector.inspector_id},
+                status=status.HTTP_201_CREATED,
+            )
+
+        except Exception as e:
+            logger.exception('Error al asignar inspector al ITSE pk=%s', pk)
             return Response(
                 {'error': str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,

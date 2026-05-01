@@ -6,6 +6,7 @@ import SideMenu from '@components/layout/SideMenu'
 import SelectorPersona from '@features/expedientes/components/SelectorPersona'
 import AgregarGiroModal from '@features/licencias/components/AgregarGiroModal'
 import { dashboardApi } from '@api/dashboardApi'
+import { inspectoresApi } from '@api/inspectoresApi'
 import { itseApi } from '@api/itseApi'
 import { licenciasApi } from '@api/licenciasApi'
 import { personasApi } from '@api/personasApi'
@@ -104,7 +105,11 @@ export default function NuevaItsePage() {
 
   // Catálogos
   const [nivelesRiesgo,    setNivelesRiesgo]    = useState([])
+  const [inspectores,      setInspectores]      = useState([])
   const [loadingCatalogos, setLoadingCatalogos] = useState(true)
+
+  // Inspector asignado
+  const [inspectorId, setInspectorId] = useState('')
 
   // Datos principales
   const [numeroItse,               setNumeroItse]               = useState('')
@@ -149,9 +154,15 @@ export default function NuevaItsePage() {
 
   useEffect(() => {
     setLoadingCatalogos(true)
-    itseApi.getNivelesRiesgo()
-      .then((res) => setNivelesRiesgo(res.data))
-      .catch(() => toast.error('Error al cargar los niveles de riesgo'))
+    Promise.all([
+      itseApi.getNivelesRiesgo(),
+      inspectoresApi.listar(),
+    ])
+      .then(([resNiveles, resInspectores]) => {
+        setNivelesRiesgo(resNiveles.data)
+        setInspectores(resInspectores.data)
+      })
+      .catch(() => toast.error('Error al cargar los catálogos'))
       .finally(() => setLoadingCatalogos(false))
   }, [])
 
@@ -262,7 +273,17 @@ export default function NuevaItsePage() {
     setSubmitting(true)
     try {
       const res = await itseApi.crear(payload)
-      setBusqueda('ID', String(res.data.id))
+      const itseId = res.data.id
+
+      if (inspectorId) {
+        try {
+          await itseApi.crearInspector(itseId, Number(inspectorId))
+        } catch {
+          toast.error('El certificado ITSE fue creado, pero no se pudo asignar el inspector')
+        }
+      }
+
+      setBusqueda('ID', String(itseId))
       toast.success('Certificado ITSE creado correctamente')
       navigate('/certificados-itse')
     } catch (err) {
@@ -425,6 +446,30 @@ export default function NuevaItsePage() {
                       placeholder="Ej. 00647587"
                       className={inputClass}
                     />
+                  </div>
+                </div>
+
+                {/* Fila 4: Inspector */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1.5">
+                      Inspector
+                    </label>
+                    <select
+                      value={inspectorId}
+                      onChange={(e) => setInspectorId(e.target.value)}
+                      disabled={loadingCatalogos}
+                      className={selectClass}
+                    >
+                      <option value="">
+                        {loadingCatalogos ? 'Cargando...' : '— Sin asignar —'}
+                      </option>
+                      {inspectores.map((insp) => (
+                        <option key={insp.id} value={insp.id}>
+                          {insp.apellido_paterno} {insp.apellido_materno}, {insp.nombres}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
 

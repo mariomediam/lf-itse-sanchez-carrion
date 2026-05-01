@@ -5,11 +5,12 @@ Centraliza la lógica del dominio separándola de la capa HTTP (views/serializer
 lo que facilita reutilización, pruebas unitarias y futuros cambios.
 """
 
+from django.db import connection
 from django.db.models import Value
-from django.db.models.functions import Concat, Upper
+from django.db.models.functions import Concat
 from django.shortcuts import get_object_or_404
 
-from ..models import Inspector
+from ..models import Inspector, ItseInspector
 
 
 def buscar_inspectores(busqueda: str | None = None) -> list[Inspector]:
@@ -103,3 +104,67 @@ def eliminar_inspector(pk: int) -> None:
     """
     inspector = get_object_or_404(Inspector, pk=pk)
     inspector.delete()
+
+
+# ── ITSE ↔ Inspector ───────────────────────────────────────────────────────────
+
+_SQL_INSPECTORES_POR_ITSE = """
+SELECT
+    ii.id,
+    ii.itse_id,
+    ii.inspector_id,
+    i.apellido_paterno,
+    i.apellido_materno,
+    i.nombres
+FROM itse_inspectores ii
+INNER JOIN inspectores i ON i.id = ii.inspector_id
+WHERE ii.itse_id = %s
+ORDER BY i.apellido_paterno, i.apellido_materno, i.nombres
+"""
+
+
+def listar_itse_inspectores(itse_id: int) -> list[dict]:
+    """
+    Retorna los inspectores asignados a un certificado ITSE.
+
+    Parámetros
+    ----------
+    itse_id : int
+        PK del certificado ITSE.
+
+    Retorna
+    -------
+    list[dict]
+        Lista de dicts con las claves:
+        ``id``, ``itse_id``, ``inspector_id``, ``apellido_paterno``,
+        ``apellido_materno``, ``nombres``.
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(_SQL_INSPECTORES_POR_ITSE, [itse_id])
+        columns = [col[0] for col in cursor.description]
+        return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+
+def crear_itse_inspector(itse_id: int, inspector_id: int, usuario) -> ItseInspector:
+    """
+    Asigna un inspector a un certificado ITSE.
+
+    Parámetros
+    ----------
+    itse_id      : int   — PK del certificado ITSE
+    inspector_id : int   — PK del inspector
+    usuario      : AUTH_USER_MODEL instance
+
+    Retorna
+    -------
+    ItseInspector
+        Instancia recién creada.
+    """
+    from ..models import Itse
+    itse      = get_object_or_404(Itse, pk=itse_id)
+    inspector = get_object_or_404(Inspector, pk=inspector_id)
+    return ItseInspector.objects.create(
+        itse=itse,
+        inspector=inspector,
+        usuario=usuario,
+    )

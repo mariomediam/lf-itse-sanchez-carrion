@@ -95,6 +95,11 @@ class InspectorWriteSerializer(serializers.Serializer):
     nombres          = serializers.CharField(max_length=50)
 
 
+class ItseInspectorCreateSerializer(serializers.Serializer):
+    """Valida el cuerpo para asignar un inspector a un certificado ITSE."""
+    inspector_id = serializers.IntegerField(min_value=1)
+
+
 class PersonaDocumentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.PersonaDocumento
