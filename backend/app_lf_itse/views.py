@@ -3625,8 +3625,11 @@ class VerificarLicenciaPublicaView(APIView):
     def get(self, request, uuid):
         licencia = LicenciaFuncionamiento.objects.filter(
             uuid=uuid,
-            se_puede_publicar=True,
-        ).select_related('nivel_riesgo').first()
+        ).select_related(
+            'nivel_riesgo', 'titular',
+        ).prefetch_related(
+            'giros__giro',
+        ).first()
 
         if not licencia:
             return Response(
@@ -3639,22 +3642,40 @@ class VerificarLicenciaPublicaView(APIView):
         ).exists()
         activa = not tiene_estado_inactivo
 
+        if activa and not licencia.es_vigencia_indeterminada and licencia.fecha_fin_vigencia:
+            activa = licencia.fecha_fin_vigencia >= date.today()
+
         if licencia.es_vigencia_indeterminada:
-            vigente = activa
-        elif licencia.fecha_fin_vigencia:
-            vigente = activa and licencia.fecha_fin_vigencia >= date.today()
+            vigencia = 'Indeterminada'
+        elif licencia.fecha_inicio_vigencia and licencia.fecha_fin_vigencia:
+            vigencia = f'{licencia.fecha_inicio_vigencia.isoformat()} - {licencia.fecha_fin_vigencia.isoformat()}'
         else:
-            vigente = activa
+            vigencia = '-'
+
+        titular = licencia.titular
+        titular_nombre = f'{titular.apellido_paterno} {titular.apellido_materno} {titular.nombres}'.strip() if titular else '-'
+
+        giros = [
+            {
+                'ciiu': str(lg.giro.ciiu_id).zfill(4) if lg.giro.ciiu_id else '-',
+                'nombre': lg.giro.nombre,
+            }
+            for lg in licencia.giros.all()
+        ]
 
         return Response({
-            'valido': True,
             'tipo': 'licencia_funcionamiento',
-            'numero': licencia.numero_licencia,
-            'anio': licencia.fecha_emision.year,
-            'nombre_comercial': licencia.nombre_comercial,
-            'direccion': licencia.direccion,
+            'numero_licencia': licencia.numero_licencia,
+            'fecha_emision': licencia.fecha_emision.isoformat(),
+            'vigencia': vigencia,
             'nivel_riesgo': licencia.nivel_riesgo.nombre if licencia.nivel_riesgo else '',
-            'vigente': vigente,
+            'horario': f'{licencia.hora_desde}:00 - {licencia.hora_hasta}:00',
+            'titular': titular_nombre,
+            'nombre_comercial': licencia.nombre_comercial,
+            'actividad_economica': licencia.actividad,
+            'direccion': licencia.direccion,
+            'area': f'{licencia.area} m²' if licencia.area is not None else '-',
+            'giros': giros,
             'activa': activa,
             'mensaje': 'Documento registrado en la Municipalidad Provincial de Lamas.',
         })
@@ -3674,8 +3695,11 @@ class VerificarItsePublicaView(APIView):
     def get(self, request, uuid):
         itse = Itse.objects.filter(
             uuid=uuid,
-            se_puede_publicar=True,
-        ).select_related('nivel_riesgo').first()
+        ).select_related(
+            'nivel_riesgo', 'titular',
+        ).prefetch_related(
+            'giros__giro',
+        ).first()
 
         if not itse:
             return Response(
@@ -3687,18 +3711,34 @@ class VerificarItsePublicaView(APIView):
             estado__esta_activo=False,
         ).exists()
         activa = not tiene_estado_inactivo
-        vigente = activa and itse.fecha_caducidad >= date.today()
+
+        if activa:
+            activa = itse.fecha_caducidad >= date.today()
+
+        titular = itse.titular
+        titular_nombre = f'{titular.apellido_paterno} {titular.apellido_materno} {titular.nombres}'.strip() if titular else '-'
+
+        giros = [
+            {
+                'ciiu': str(ig.giro.ciiu_id).zfill(4) if ig.giro.ciiu_id else '-',
+                'nombre': ig.giro.nombre,
+            }
+            for ig in itse.giros.all()
+        ]
 
         return Response({
-            'valido': True,
             'tipo': 'certificado_itse',
-            'numero': itse.numero_itse,
-            'anio': itse.fecha_expedicion.year,
+            'numero_itse': itse.numero_itse,
+            'fecha_expedicion': itse.fecha_expedicion.isoformat(),
+            'fecha_solicitud_renovacion': itse.fecha_solicitud_renovacion.isoformat(),
+            'fecha_caducidad': itse.fecha_caducidad.isoformat(),
+            'nivel_riesgo': itse.nivel_riesgo.nombre if itse.nivel_riesgo else '',
+            'titular': titular_nombre,
             'nombre_comercial': itse.nombre_comercial,
             'direccion': itse.direccion,
-            'nivel_riesgo': itse.nivel_riesgo.nombre if itse.nivel_riesgo else '',
-            'fecha_caducidad': itse.fecha_caducidad.isoformat(),
-            'vigente': vigente,
+            'area': f'{itse.area} m²' if itse.area is not None else '-',
+            'capacidad_aforo': itse.capacidad_aforo,
+            'giros': giros,
             'activa': activa,
             'mensaje': 'Documento registrado en la Municipalidad Provincial de Lamas.',
         })

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import QRCode from 'react-qr-code'
+import { QRCode } from 'react-qr-code'
 import { itseApi } from '@api/itseApi'
 import { configPublicaApi } from '@api/configPublicaApi'
 

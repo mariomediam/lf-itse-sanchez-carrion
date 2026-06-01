@@ -140,13 +140,13 @@ const VerificarDocumentoPage = ({ tipo }) => {
                   gap: '8px',
                   padding: '8px 20px',
                   borderRadius: '24px',
-                  backgroundColor: data.vigente ? '#f0fdf4' : '#fef2f2',
-                  border: `2px solid ${data.vigente ? '#22c55e' : '#ef4444'}`,
+                  backgroundColor: data.activa ? '#f0fdf4' : '#fef2f2',
+                  border: `2px solid ${data.activa ? '#22c55e' : '#ef4444'}`,
                 }}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke={data.vigente ? '#22c55e' : '#ef4444'}
+                    stroke={data.activa ? '#22c55e' : '#ef4444'}
                     strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    {data.vigente ? (
+                    {data.activa ? (
                       <><path d="M22 11.08V12a10 10 0 11-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></>
                     ) : (
                       <><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></>
@@ -155,11 +155,11 @@ const VerificarDocumentoPage = ({ tipo }) => {
                   <span style={{
                     fontWeight: 'bold',
                     fontSize: '15px',
-                    color: data.vigente ? '#166534' : '#991b1b',
+                    color: data.activa ? '#166534' : '#991b1b',
                     textTransform: 'uppercase',
                     letterSpacing: '1px',
                   }}>
-                    {data.vigente ? 'Vigente' : (data.activa === false ? 'Inactiva' : 'Vencida')}
+                    {data.activa ? 'Activa' : 'Inactiva'}
                   </span>
                 </div>
               </div>
@@ -167,12 +167,59 @@ const VerificarDocumentoPage = ({ tipo }) => {
               {/* Datos */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <FilaVerificacion label="Tipo" valor={data.tipo === 'licencia_funcionamiento' ? 'Licencia de Funcionamiento' : 'Certificado ITSE'} />
-                <FilaVerificacion label="Número" valor={`${data.numero} - ${data.anio}`} />
-                <FilaVerificacion label="Nombre Comercial" valor={data.nombre_comercial} />
-                <FilaVerificacion label="Dirección" valor={data.direccion} />
-                <FilaVerificacion label="Nivel de Riesgo" valor={data.nivel_riesgo} />
-                {data.fecha_caducidad && (
-                  <FilaVerificacion label="Fecha Caducidad" valor={data.fecha_caducidad} />
+
+                {data.tipo === 'licencia_funcionamiento' && (
+                  <>
+                    <FilaVerificacion label="N° Licencia" valor={data.numero_licencia} />
+                    <FilaVerificacion label="Fecha Emisión" valor={data.fecha_emision} />
+                    <FilaVerificacion label="Vigencia" valor={data.vigencia} />
+                    <FilaVerificacion label="Nivel de Riesgo" valor={data.nivel_riesgo} />
+                    <FilaVerificacion label="Horario" valor={data.horario} />
+                    <FilaVerificacion label="Titular" valor={data.titular} />
+                    <FilaVerificacion label="Nombre Comercial" valor={data.nombre_comercial} />
+                    <FilaVerificacion label="Actividad Económica" valor={data.actividad_economica} />
+                    <FilaVerificacion label="Dirección" valor={data.direccion} />
+                    <FilaVerificacion label="Área" valor={data.area} />
+                    {data.giros?.length > 0 && (
+                      <div style={{ padding: '8px 0', borderBottom: '1px solid #f3f4f6' }}>
+                        <span style={{ fontSize: '13px', color: '#6b7280', display: 'block', marginBottom: '6px' }}>
+                          Giros Autorizados
+                        </span>
+                        {data.giros.map((g, i) => (
+                          <p key={i} style={{ margin: '2px 0', fontSize: '13px', fontWeight: '600', color: '#111827' }}>
+                            {g.ciiu} - {g.nombre}
+                          </p>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {data.tipo === 'certificado_itse' && (
+                  <>
+                    <FilaVerificacion label="N° ITSE" valor={data.numero_itse} />
+                    <FilaVerificacion label="Fecha Expedición" valor={data.fecha_expedicion} />
+                    <FilaVerificacion label="Fecha Solicitud Renovación" valor={data.fecha_solicitud_renovacion} />
+                    <FilaVerificacion label="Fecha Caducidad" valor={data.fecha_caducidad} />
+                    <FilaVerificacion label="Nivel de Riesgo" valor={data.nivel_riesgo} />
+                    <FilaVerificacion label="Titular" valor={data.titular} />
+                    <FilaVerificacion label="Nombre Comercial" valor={data.nombre_comercial} />
+                    <FilaVerificacion label="Dirección" valor={data.direccion} />
+                    <FilaVerificacion label="Área" valor={data.area} />
+                    <FilaVerificacion label="Capacidad de Aforo" valor={data.capacidad_aforo} />
+                    {data.giros?.length > 0 && (
+                      <div style={{ padding: '8px 0', borderBottom: '1px solid #f3f4f6' }}>
+                        <span style={{ fontSize: '13px', color: '#6b7280', display: 'block', marginBottom: '6px' }}>
+                          Giros Autorizados
+                        </span>
+                        {data.giros.map((g, i) => (
+                          <p key={i} style={{ margin: '2px 0', fontSize: '13px', fontWeight: '600', color: '#111827' }}>
+                            {g.ciiu} - {g.nombre}
+                          </p>
+                        ))}
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
 
