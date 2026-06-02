@@ -144,8 +144,11 @@ const LicenciaImprimirPage = () => {
       <style>{`
         @media print {
           @page { size: A4; margin: 0; }
+          html, body { margin: 0; padding: 0; }
           body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
           .no-print { display: none !important; }
+          .fondo-gris { background: none !important; padding: 0 !important; }
+          .hoja-a4 { margin: 0 !important; box-shadow: none !important; }
         }
       `}</style>
 
@@ -172,10 +175,10 @@ const LicenciaImprimirPage = () => {
       </div>
 
       {/* Fondo gris */}
-      <div style={{ backgroundColor: '#d1d5db', minHeight: '100vh', paddingTop: '32px', paddingBottom: '32px' }}>
+      <div className="fondo-gris" style={{ backgroundColor: '#d1d5db', minHeight: '100vh', paddingTop: '32px', paddingBottom: '32px' }}>
 
         {/* Hoja A4 */}
-        <div style={{
+        <div className="hoja-a4" style={{
           width: '210mm',
           height: '297mm',
           margin: '0 auto',
