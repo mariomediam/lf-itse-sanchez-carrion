@@ -22,6 +22,11 @@ const NOTAS = [
   'El cierre del establecimiento debe ser comunicado, previa devolución del cartón.',
 ]
 
+const colores = {
+  "rojo": "#F70302"
+}
+  
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 const formatFechaEnLetras = (fechaStr) => {
@@ -233,34 +238,34 @@ const LicenciaImprimirPage = () => {
 
             {/* ── TÍTULOS CENTRADOS ── */}
             <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-              <p style={{ fontWeight: 'bold', fontSize: '16px', margin: '0 0 6px 0', textTransform: 'uppercase' }}>
+              <p style={{ fontWeight: 'bold', fontSize: '20px', margin: '0 0 4px 0', textTransform: 'uppercase', color: colores.rojo,  paddingInline: '20px', lineHeight: '1.1' }}>
                 Certificado de Licencia Municipal de Funcionamiento
               </p>
-              <p style={{ fontWeight: 'bold', fontSize: '11px', margin: '0 0 2px 0' }}>
+              <p style={{ fontWeight: 'bold', fontSize: '12px', margin: '0 0 0px 0', paddingBottom: '0px' }}>
                 LEY Nº 28976
               </p>
-              <p style={{ fontWeight: 'bold', fontSize: '11px', margin: '0 0 8px 0' }}>
+              <p style={{ fontWeight: '800', fontSize: '18px', margin: '0 0 8px 0' }}>
                 ORDENANZA MUNICIPAL Nº 022-2010-MPL
               </p>
             </div>
 
             {/* ── INTRODUCCIÓN ── */}
-            <p style={{ fontSize: '11px', textAlign: 'center', margin: '0 0 14px 0', lineHeight: '1.6' }}>
+            <p style={{ fontSize: '16px', textAlign: 'center', margin: '0 0 14px 0', lineHeight: '1.2',letterSpacing: '0.1px' }}>
               EL SUBGERENTE DE COMERCIO, LICENCIAS Y CONTROL SANITARIO DE LA MUNICIPALIDAD PROVINCIAL DE LAMAS, QUE SUSCRIBE:
             </p>
 
             {/* ── CERTIFICA A ── */}
-            <p style={{ fontWeight: 'bold', fontSize: '16px', textAlign: 'center', margin: '0 0 10px 0', textDecoration: 'underline' }}>
+            <p style={{ fontWeight: '900', fontSize: '20px', textAlign: 'center', margin: '0 0 10px 0' }}>
               CERTIFICA A:
             </p>
 
             {/* ── NOMBRE COMERCIAL ── */}
-            <p style={{ fontWeight: 'bold', fontSize: '28px', textAlign: 'center', margin: '0 0 14px 0', textTransform: 'uppercase', lineHeight: '1.2' }}>
+            <p style={{ fontWeight: '900', fontSize: '28px', textAlign: 'center', margin: '0 0 14px 0', textTransform: 'uppercase', lineHeight: '1.2' }}>
               {licencia.nombre_comercial || '-'}
             </p>
 
             {/* ── PÁRRAFO PRINCIPAL ── */}
-            <p style={{ fontSize: '12px', textAlign: 'justify', margin: '0 0 14px 0', lineHeight: '1.7' }}>
+            <p style={{ fontSize: '14px', textAlign: 'justify', margin: '0 0 14px 0', lineHeight: '1.2' }}>
               Con dirección en {licencia.direccion || '-'}, distrito y provincia de Lamas, región
               San Martín{licencia.titular_ruc ? `; con RUC N° ${licencia.titular_ruc}` : ''}, expedida
               con Resolución Subgerencial Nº {licencia.resolucion_numero || '-'}, registrado con el
@@ -268,10 +273,10 @@ const LicenciaImprimirPage = () => {
             </p>
 
             {/* ── PROPIETARIO / REPRESENTANTE LEGAL ── */}
-            <p style={{ fontWeight: 'bold', fontSize: '12px', margin: '0 0 4px 0', textDecoration: 'underline' }}>
+            <p style={{ fontWeight: 'bold', fontSize: '14px', margin: '0 0 4px 0', textDecoration: 'underline' }}>
               Propietario o Representante Legal:
             </p>
-            <p style={{ fontSize: '12px', textAlign: 'justify', margin: '0 0 14px 0', lineHeight: '1.7' }}>
+            <p style={{ fontSize: '14px', textAlign: 'justify', margin: '6px 0 14px 0', lineHeight: '1.2' }}>
               <strong>{licencia.conductor_nombre || '-'}</strong>
               {docIdentidad && (
                 <> con {etiquetaDocumento(docIdentidad)} Nº {docIdentidad.numero_documento}</>
@@ -281,21 +286,21 @@ const LicenciaImprimirPage = () => {
             </p>
 
             {/* ── ACTIVIDAD ECONÓMICA ── */}
-            <p style={{ fontWeight: 'bold', fontSize: '12px', margin: '0 0 4px 0', textDecoration: 'underline' }}>
+            <p style={{ fontWeight: 'bold', fontSize: '14px', margin: '0 0 4px 0', textDecoration: 'underline' }}>
               Actividad Económica:
             </p>
-            <p style={{ fontWeight: 'bold', fontSize: '16px', margin: '0 0 14px 0', lineHeight: '1.5', textTransform: 'uppercase' }}>
+            <p style={{ fontWeight: '900', fontSize: '18px', margin: '6px 0 14px 0', lineHeight: '1.2', textTransform: 'uppercase' }}>
               {girosTexto || '-'}
             </p>
 
             {/* ── HABILITACIÓN ── */}
-            <p style={{ fontSize: '12px', textAlign: 'justify', margin: '0 0 16px 0', lineHeight: '1.7' }}>
+            <p style={{ fontSize: '14px', textAlign: 'justify', margin: '0 0 16px 0', lineHeight: '1.2' }}>
               Habiendo cumplido con los requisitos reglamentarios que exige las Disposiciones Municipales
               vigentes, está legalmente habilitada a desarrollar su actividad económica.
             </p>
 
             {/* ── LUGAR Y FECHA ── */}
-            <p style={{ fontSize: '12px', textAlign: 'right', margin: '0 0 0 0', lineHeight: '1.5' }}>
+            <p style={{ fontSize: '14px', textAlign: 'right', margin: '0 0 0 0', lineHeight: '1.5' }}>
               Lamas, {formatFechaEnLetras(licencia.fecha_emision)}
             </p>
 
@@ -304,14 +309,14 @@ const LicenciaImprimirPage = () => {
 
             {/* ── NOTA + QR ── */}
             <div style={{ border: '1.5px solid #000', padding: '8px 10px', display: 'flex', gap: '10px' }}>
-              <div style={{ flex: 1 }}>
-                <p style={{ fontWeight: 'bold', fontSize: '9px', margin: '0 0 4px 0', color: '#c00', textDecoration: 'underline' }}>
+              <div style={{ flex: 1, color: colores.rojo }}>
+                <p style={{ fontWeight: 'bold', fontSize: '12px', margin: '0 0 4px 0', color: '#c00', textDecoration: 'underline' }}>
                   NOTA:
                 </p>
                 {NOTAS.map((texto, i) => (
                   <div key={i} style={{ display: 'flex', gap: '4px', marginBottom: '2px' }}>
-                    <span style={{ fontSize: '8.5px', flexShrink: 0 }}>-</span>
-                    <p style={{ margin: 0, fontSize: '8.5px', lineHeight: '1.4' }}>{texto}</p>
+                    <span style={{ fontSize: '11px', flexShrink: 0 }}>-</span>
+                    <p style={{ margin: 0, fontSize: '11px', lineHeight: '1.4' }}>{texto}</p>
                   </div>
                 ))}
               </div>
