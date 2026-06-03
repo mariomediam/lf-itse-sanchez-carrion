@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { QRCode } from 'react-qr-code'
 import { licenciasApi } from '@api/licenciasApi'
 import { personasApi } from '@api/personasApi'
+import { configPublicaApi } from '@api/configPublicaApi'
 
 // ── Constantes ────────────────────────────────────────────────────────────────
 
@@ -78,6 +80,7 @@ const LicenciaImprimirPage = () => {
   const [licencia, setLicencia] = useState(null)
   const [giros, setGiros] = useState([])
   const [docConductor, setDocConductor] = useState(null)
+  const [qrUrl, setQrUrl] = useState(null)
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState(null)
 
@@ -85,9 +88,10 @@ const LicenciaImprimirPage = () => {
     const cargar = async () => {
       try {
         setCargando(true)
-        const [licRes, girosRes] = await Promise.all([
+        const [licRes, girosRes, configRes] = await Promise.all([
           licenciasApi.buscar('ID', id),
           licenciasApi.getGiros(id),
+          configPublicaApi.getConfig().catch(() => ({ data: {} })),
         ])
 
         const lic = licRes.data[0]
@@ -95,6 +99,12 @@ const LicenciaImprimirPage = () => {
 
         setLicencia(lic)
         setGiros(girosRes.data)
+
+        const cfg = configRes.data
+        if (cfg.qr_verificacion_habilitado && cfg.qr_url_verificar_licencia && lic.uuid) {
+          const base = cfg.qr_url_verificar_licencia.replace(/\/+$/, '')
+          setQrUrl(`${base}/${lic.uuid}`)
+        }
 
         if (lic.conductor_id) {
           try {
@@ -346,6 +356,16 @@ const LicenciaImprimirPage = () => {
 
             {/* Espaciador */}
             <div style={{ flex: 1 }} />
+
+            {/* ── QR ── */}
+            {qrUrl && (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'end', marginBottom: '8px' }}>
+                <QRCode value={qrUrl} size={68} level="M" />
+                <p style={{ fontSize: '7px', margin: '3px 0 0 0', textAlign: 'center', color: '#555' }}>
+                  Verificar documento
+                </p>
+              </div>
+            )}
 
           </div>{/* fin cuerpo */}
 

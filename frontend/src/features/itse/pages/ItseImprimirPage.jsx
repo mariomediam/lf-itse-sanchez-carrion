@@ -203,7 +203,7 @@ const ItseImprimirPage = () => {
 
           {/* ── PÁRRAFO INTRODUCTORIO ── */}
           <p style={{ fontSize: '12px', textAlign: 'justify', margin: '0 0 8px 0', lineHeight: '1.6' }}>
-            El Órgano Ejecutante de la Municipalidad Provincial de Lamas, en cumplimiento de lo establecido en el D.S. Nº 002-2018-PCM, ha realizado la Inspección Técnica de Seguridad en Edificaciones al Establecimiento Objeto de Inspección:
+            El Órgano Ejecutante de la Municipalidad Provincial Sánchez Carrión, en cumplimiento de lo establecido en el D.S. Nº 002-2018-PCM, ha realizado la Inspección Técnica de Seguridad en Edificaciones al Establecimiento Objeto de Inspección:
           </p>
 
           {/* ── NOMBRE COMERCIAL ── */}
@@ -216,7 +216,7 @@ const ItseImprimirPage = () => {
             Ubicado en :&nbsp;&nbsp;&nbsp;&nbsp;{itse.direccion || '-'}
           </p>
           <p style={{ fontSize: '12px', margin: '0 0 8px 0', lineHeight: '1.5', fontWeight: 'bold' }}>
-            Distrito de Pinto Recodo - Provincia Lamas - Departamento San Martín
+            Distrito de Pinto Recodo - Provincia Sánchez Carrión - Departamento San Martín
           </p>
 
           {/* ── SOLICITADO POR ── */}
@@ -263,7 +263,7 @@ const ItseImprimirPage = () => {
 
           {/* ── LUGAR Y FECHA ── */}
           <p style={{ fontSize: '16px', textAlign: 'right', margin: '0 0 10px 0', fontWeight: 'bold' }}>
-            LAMAS, {formatFechaLarga(itse.fecha_expedicion)}
+            SÁNCHEZ CARRIÓN, {formatFechaLarga(itse.fecha_expedicion)}
           </p>
 
           {/* ── FECHAS ── */}
