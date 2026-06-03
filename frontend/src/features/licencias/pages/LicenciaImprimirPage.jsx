@@ -44,38 +44,28 @@ const quitarPalabraRiesgo = (nombre) => {
   return nombre.replace(/riesgo\s*/gi, '').trim()
 }
 
-// ── Estilos comunes ───────────────────────────────────────────────────────────
-
-const estilos = {
-  campo: {
-    fontSize: '15px',
-    lineHeight: '2',
-    margin: '0',
-  },
-  etiqueta: {
-    fontWeight: 'normal',
-  },
-  valor: {
-    fontWeight: 'bold',
-  },
-}
-
 // ── Campo de formulario ───────────────────────────────────────────────────────
 
-function CampoFormulario({ etiqueta, valor, inline }) {
-  if (inline) {
-    return (
-      <p style={estilos.campo}>
-        <span style={estilos.etiqueta}>{etiqueta}: </span>
-        <span style={estilos.valor}>{valor || '-'}</span>
-      </p>
-    )
-  }
+function CampoFormulario({ etiqueta, valor }) {
   return (
-    <p style={estilos.campo}>
-      <span style={estilos.etiqueta}>{etiqueta}:</span>{' '}
-      <span style={estilos.valor}>{valor || '-'}</span>
-    </p>
+    <div style={{
+      display: 'flex',
+      alignItems: 'baseline',
+      fontSize: '12px',
+      lineHeight: '1.2',
+      marginBottom: '12px',
+    }}>
+      <span style={{ flexShrink: 0, whiteSpace: 'nowrap' }}>{etiqueta}:</span>
+      <span style={{
+        flex: 1,
+        fontWeight: 'bold',
+        marginLeft: '6px',
+        fontSize: '15px',
+        borderBottom: '1.5px dotted #000',
+      }}>
+        {valor || '-'}
+      </span>
+    </div>
   )
 }
 
@@ -228,7 +218,7 @@ const LicenciaImprimirPage = () => {
           />
 
           {/* ── CUERPO ── */}
-          <div style={{ flex: 1, marginTop: '-10mm', padding: '0mm 16mm 8mm 16mm', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ flex: 1, marginTop: '-10mm', padding: '0mm 16mm 0 16mm', display: 'flex', flexDirection: 'column' }}>
 
             {/* Título */}
             <h1 style={{
@@ -278,13 +268,33 @@ const LicenciaImprimirPage = () => {
               <CampoFormulario etiqueta="REPRESENTANTE LEGAL" valor={(licencia.conductor_nombre || '').toUpperCase()} />
 
               {/* RUC y DNI en la misma línea */}
-              <p style={estilos.campo}>
-                <span style={estilos.etiqueta}>N.° R.U.C.: </span>
-                <span style={estilos.valor}>{licencia.titular_ruc || '-'}</span>
-                <span style={{ marginLeft: '30px' }} />
-                <span style={estilos.etiqueta}>N.° {docEtiqueta}: </span>
-                <span style={estilos.valor}>{docNumero || '-'}</span>
-              </p>
+              <div style={{
+                display: 'flex',
+                alignItems: 'baseline',
+                fontSize: '12px',
+                lineHeight: '1.2',
+                marginBottom: '12px',
+              }}>
+                <span style={{ flexShrink: 0, whiteSpace: 'nowrap' }}>N.° R.U.C.:</span>
+                <span style={{
+                  fontWeight: 'bold',
+                  marginLeft: '6px',
+                  fontSize: '15px',
+                  borderBottom: '1.5px dotted #000',
+                }}>
+                  {licencia.titular_ruc || '-'}
+                </span>
+                <span style={{ flexShrink: 0, whiteSpace: 'nowrap', marginLeft: '20px' }}>N.° {docEtiqueta}:</span>
+                <span style={{
+                  flex: 1,
+                  fontWeight: 'bold',
+                  marginLeft: '6px',
+                  fontSize: '15px',
+                  borderBottom: '1.5px dotted #000',
+                }}>
+                  {docNumero || '-'}
+                </span>
+              </div>
 
               <CampoFormulario
                 etiqueta="HORARIO"
@@ -295,16 +305,32 @@ const LicenciaImprimirPage = () => {
               <CampoFormulario etiqueta="ACTIVIDAD" valor={(licencia.actividad || '').toUpperCase()} />
 
               {/* Nivel de riesgo + tipo letrero en la misma línea */}
-              <p style={estilos.campo}>
-                <span style={estilos.etiqueta}>NIVEL DE RIESGO: </span>
-                <span style={estilos.valor}>{nivelRiesgoLimpio.toUpperCase()}</span>
-                {tipoLetrero && (
-                  <>
-                    <span style={{ marginLeft: '40px' }} />
-                    <span style={estilos.valor}>{tipoLetrero.toUpperCase()}.</span>
-                  </>
-                )}
-              </p>
+              <div style={{
+                display: 'flex',
+                alignItems: 'baseline',
+                fontSize: '12px',
+                lineHeight: '1.2',
+                marginBottom: '12px',
+              }}>
+                <span style={{ flexShrink: 0, whiteSpace: 'nowrap' }}>NIVEL DE RIESGO:</span>
+                <span style={{
+                  fontWeight: 'bold',
+                  marginLeft: '6px',
+                  fontSize: '15px',
+                  borderBottom: '1.5px dotted #000',
+                }}>
+                  {nivelRiesgoLimpio.toUpperCase()}
+                </span>
+                <span style={{
+                  flex: 1,
+                  fontWeight: 'bold',
+                  marginLeft: '20px',
+                  fontSize: '15px',
+                  borderBottom: '1.5px dotted #000',
+                }}>
+                  {tipoLetrero ? `${tipoLetrero.toUpperCase()}.` : '-'}
+                </span>
+              </div>
 
               <CampoFormulario etiqueta="DIRECCIÓN" valor={(licencia.direccion || '').toUpperCase()} />
               <CampoFormulario etiqueta="ZONIFICACIÓN" valor={(licencia.zonificacion_nombre || '').toUpperCase()} />
@@ -312,7 +338,7 @@ const LicenciaImprimirPage = () => {
             </div>
 
             {/* ── Fecha ── */}
-            <p style={{ fontSize: '13px', textAlign: 'center', margin: '16px 0 0 0' }}>
+            <p style={{ fontSize: '15px', textAlign: 'end', margin: '16px 0 0 0' }}>
               Huamachuco, <strong>{getDia(licencia.fecha_emision)}</strong> de{' '}
               <strong>{getMes(licencia.fecha_emision)}</strong> del{' '}
               <strong>{getAnio(licencia.fecha_emision)}</strong>.
@@ -321,36 +347,37 @@ const LicenciaImprimirPage = () => {
             {/* Espaciador */}
             <div style={{ flex: 1 }} />
 
-            {/* ── PIE DE PÁGINA ── */}
-            <div style={{
-              borderTop: '2px solid #8B0000',
-              paddingTop: '6px',
-              marginTop: '12px',
-            }}>
-              <p style={{
-                fontSize: '10px',
-                textAlign: 'justify',
-                lineHeight: '1.4',
-                margin: '0 0 6px 0',
-                color: '#333',
-              }}>
-                Prohibido usar la vía pública (calles y veredas), fachadas como muestrario de productos,
-                carteles, pizarras y/o avisos publicitarios sin autorización municipal. Prohibida la
-                contaminación ambiental y sonora (ruidos no permisibles).
-              </p>
-              <p style={{
-                fontSize: '11px',
-                fontWeight: 'bold',
-                textAlign: 'center',
-                margin: 0,
-                color: '#8B0000',
-                letterSpacing: '0.5px',
-              }}>
-                COLOCAR EN UN LUGAR VISIBLE DEL ESTABLECIMIENTO
-              </p>
-            </div>
-
           </div>{/* fin cuerpo */}
+
+          {/* ── PIE DE PÁGINA ── */}
+          <div style={{
+            backgroundColor: '#822925',
+            padding: '8px 16px 10px 16px',
+            marginTop: 'auto',
+          }}>
+            <p style={{
+              fontSize: '14px',
+              textAlign: 'center',
+              lineHeight: '1.4',
+              margin: '0 0 6px 0',
+              color: '#ffffff',
+            }}>
+              Prohibido usar la vía pública (calles y veredas), fachadas como muestrario de productos,
+              carteles, pizarras y/o avisos publicitarios sin autorización municipal. Prohibida la
+              contaminación ambiental y sonora (ruidos no permisibles).
+            </p>
+            <p style={{
+              fontSize: '15px',
+              fontWeight: 'bold',
+              textAlign: 'center',
+              margin: 0,
+              color: '#ffffff',
+              letterSpacing: '0.5px',
+            }}>
+              COLOCAR EN UN LUGAR VISIBLE DEL ESTABLECIMIENTO
+            </p>
+          </div>
+
         </div>{/* fin hoja A4 */}
       </div>{/* fin fondo gris */}
     </>
