@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'flowbite-react'
 import { toast } from 'sonner'
 import { itseApi } from '@api/itseApi'
 
-const MAX_SIZE_BYTES = 15 * 1024 * 1024
+const MAX_SIZE_BYTES = 100 * 1024 * 1024
 
 const formatSize = (bytes) => {
   if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
@@ -91,7 +91,7 @@ export default function DocumentosAdjuntosItseModal({ isOpen, onClose, itse }) {
   const validarYSeleccionar = (file) => {
     if (!file) return
     if (file.size > MAX_SIZE_BYTES) {
-      toast.error('El archivo supera el tamaño máximo permitido de 15 MB')
+      toast.error('El archivo supera el tamaño máximo permitido de 100 MB')
       return
     }
     setArchivoSeleccionado(file)
@@ -238,7 +238,7 @@ export default function DocumentosAdjuntosItseModal({ isOpen, onClose, itse }) {
               <IconoUploadGrande />
               <p className="mt-3 text-sm font-semibold text-primary">Arrastre archivo aquí</p>
               <p className="text-xs text-gray-500">o haga clic para explorar (PDF)</p>
-              <p className="text-xs text-gray-400 mt-1">Tamaño máximo 15 MB</p>
+              <p className="text-xs text-gray-400 mt-1">Tamaño máximo 100 MB</p>
             </>
           )}
         </div>
