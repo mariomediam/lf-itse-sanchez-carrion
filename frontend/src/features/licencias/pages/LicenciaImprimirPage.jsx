@@ -33,12 +33,14 @@ const getMes = (fechaStr) => {
 }
 
 const formatHora12 = (hora) => {
-  if (hora == null) return ''
-  const h = Number(hora)
-  if (h === 0) return '12:00 A.M.'
-  if (h === 12) return '12:00 P.M.'
-  if (h < 12) return `${String(h).padStart(2, '0')}:00 A.M.`
-  return `${String(h - 12).padStart(2, '0')}:00 P.M.`
+  if (hora == null || hora === '') return ''
+  const [hStr, mStr = '00'] = String(hora).split(':')
+  const h = Number(hStr)
+  if (Number.isNaN(h)) return ''
+  const minutos = String(mStr).padStart(2, '0').slice(0, 2)
+  const sufijo = (h % 24) < 12 ? 'A.M.' : 'P.M.'
+  const h12 = h % 12 || 12
+  return `${String(h12).padStart(2, '0')}:${minutos} ${sufijo}`
 }
 
 const quitarPalabraRiesgo = (nombre) => {

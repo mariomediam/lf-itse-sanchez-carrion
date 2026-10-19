@@ -23,6 +23,14 @@ const selectClass = inputClass
 
 const isoAFecha = (iso) => (iso ? iso.split('T')[0] : '')
 
+const horaParaInput = (valor) => {
+  if (valor == null || valor === '') return ''
+  const hhmm = String(valor).slice(0, 5)
+  const hora = Number(hhmm.slice(0, 2))
+  if (Number.isNaN(hora) || hora > 23) return '00:00'
+  return hhmm
+}
+
 const buildPersonaOption = (persona) => ({
   value: persona.id,
   label: persona.persona_nombre,
@@ -196,8 +204,8 @@ export default function ModificarLicenciaPage() {
         setTipoLicenciaId(String(lf.tipo_licencia_id))
         setResolucionNumero(lf.resolucion_numero ?? '')
         setNivelRiesgoId(String(lf.nivel_riesgo_id))
-        setHoraDesde(String(lf.hora_desde))
-        setHoraHasta(String(lf.hora_hasta))
+        setHoraDesde(horaParaInput(lf.hora_desde))
+        setHoraHasta(horaParaInput(lf.hora_hasta))
         setNumeroReciboPago(lf.numero_recibo_pago ?? '')
         setTipoLetreroId(lf.tipo_letrero_id != null ? String(lf.tipo_letrero_id) : '')
 
@@ -295,8 +303,8 @@ export default function ModificarLicenciaPage() {
       nivel_riesgo_id:          Number(nivelRiesgoId),
       actividad:                actividad.trim(),
       direccion:                direccion.trim(),
-      hora_desde:               Number(horaDesde),
-      hora_hasta:               Number(horaHasta),
+      hora_desde:               horaDesde || null,
+      hora_hasta:               horaHasta || null,
       resolucion_numero:        resolucionNumero.trim(),
       zonificacion_id:          Number(zonificacionId),
       area:                     area,
@@ -524,12 +532,10 @@ export default function ModificarLicenciaPage() {
                       Hora desde <span className="text-danger">*</span>
                     </label>
                     <input
-                      type="number"
-                      min="0"
-                      max="23"
+                      type="time"
+                      step="60"
                       value={horaDesde}
                       onChange={(e) => setHoraDesde(e.target.value)}
-                      placeholder="0"
                       className={inputClass}
                     />
                   </div>
@@ -538,12 +544,10 @@ export default function ModificarLicenciaPage() {
                       Hora hasta <span className="text-danger">*</span>
                     </label>
                     <input
-                      type="number"
-                      min="0"
-                      max="23"
+                      type="time"
+                      step="60"
                       value={horaHasta}
                       onChange={(e) => setHoraHasta(e.target.value)}
-                      placeholder="23"
                       className={inputClass}
                     />
                   </div>

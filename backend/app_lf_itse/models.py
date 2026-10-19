@@ -397,8 +397,8 @@ class LicenciaFuncionamiento(models.Model):
     )
     actividad = models.CharField(max_length=50)
     direccion = models.CharField(max_length=250)
-    hora_desde = models.IntegerField()
-    hora_hasta = models.IntegerField()
+    hora_desde = models.TimeField(null=True, blank=True)
+    hora_hasta = models.TimeField(null=True, blank=True)
     resolucion_numero = models.CharField(max_length=50)
     zonificacion = models.ForeignKey(
         Zonificacion,

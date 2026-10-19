@@ -274,8 +274,8 @@ export default function NuevaLicenciaPage() {
       nivel_riesgo_id:         Number(nivelRiesgoId),
       actividad:               actividad.trim(),
       direccion:               direccion.trim(),
-      hora_desde:              Number(horaDesde),
-      hora_hasta:              Number(horaHasta),
+      hora_desde:              horaDesde || null,
+      hora_hasta:              horaHasta || null,
       resolucion_numero:       resolucionNumero.trim(),
       zonificacion_id:         Number(zonificacionId),
       area:                    area,
@@ -489,12 +489,10 @@ export default function NuevaLicenciaPage() {
                       Hora desde <span className="text-danger">*</span>
                     </label>
                     <input
-                      type="number"
-                      min="0"
-                      max="23"
+                      type="time"
+                      step="60"
                       value={horaDesde}
                       onChange={(e) => setHoraDesde(e.target.value)}
-                      placeholder="0"
                       className={inputClass}
                     />
                   </div>
@@ -503,12 +501,10 @@ export default function NuevaLicenciaPage() {
                       Hora hasta <span className="text-danger">*</span>
                     </label>
                     <input
-                      type="number"
-                      min="0"
-                      max="23"
+                      type="time"
+                      step="60"
                       value={horaHasta}
                       onChange={(e) => setHoraHasta(e.target.value)}
-                      placeholder="23"
                       className={inputClass}
                     />
                   </div>

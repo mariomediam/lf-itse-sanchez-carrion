@@ -19,8 +19,11 @@ const formatVigencia = (licencia) => {
 }
 
 const formatHorario = (desde, hasta) => {
-  if (desde == null && hasta == null) return '-'
-  return `${desde} - ${hasta} horas`
+  const hora = (v) => (v == null || v === '' ? null : String(v).slice(0, 5))
+  const d = hora(desde)
+  const h = hora(hasta)
+  if (!d && !h) return '-'
+  return `${d ?? '-'} - ${h ?? '-'} horas`
 }
 
 // ── Iconos ────────────────────────────────────────────────────────────────────
