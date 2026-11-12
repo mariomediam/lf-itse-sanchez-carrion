@@ -633,6 +633,7 @@ export default function ModificarLicenciaPage() {
                     type="text"
                     value={actividad}
                     onChange={(e) => setActividad(e.target.value)}
+                    maxLength={250}
                     placeholder="Ej. Servicio de expendio de comidas y bebidas"
                     className={inputClass}
                   />
