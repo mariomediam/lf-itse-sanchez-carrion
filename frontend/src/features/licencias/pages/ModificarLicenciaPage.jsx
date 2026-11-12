@@ -627,7 +627,7 @@ export default function ModificarLicenciaPage() {
 
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1.5">
-                    Actividad económica <span className="text-danger">*</span>
+                    Giro autorizado <span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
@@ -691,7 +691,7 @@ export default function ModificarLicenciaPage() {
             </SeccionCard>
 
             {/* ── Giros autorizados ─────────────────────────────────────── */}
-            <SeccionCard icono={IconoGiros} titulo="Giros autorizados">
+            <SeccionCard icono={IconoGiros} titulo="Actividades económicas">
               <div className="space-y-3">
 
                 <div className="flex justify-end">
@@ -704,7 +704,7 @@ export default function ModificarLicenciaPage() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
-                    Añadir giro
+                    Añadir actividad
                   </button>
                 </div>
 

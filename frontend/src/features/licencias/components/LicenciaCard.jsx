@@ -193,7 +193,7 @@ export default function LicenciaCard({ licencia, onRefrescar }) {
 
           {/* Actividad */}
           <p className="text-xs text-gray-500 mb-0.5">
-            Actividad económica:{' '}
+            Giro comercial:{' '}
             <strong className="text-gray-700">{licencia.actividad}</strong>
           </p>
 

@@ -114,14 +114,14 @@ export default function AgregarGiroModal({ isOpen, onClose, girosYaAgregados = [
                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
           </span>
-          <span className="text-base font-semibold text-gray-800">Agregar giros</span>
+          <span className="text-base font-semibold text-gray-800">Agregar actividad económica</span>
         </div>
       </ModalHeader>
 
       <ModalBody className="bg-white px-6 pt-6 pb-0" style={{ minHeight: '320px' }}>
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1.5">
-            Seleccionar giros
+            Seleccionar giro autorizado
           </label>
           <AsyncSelect
             loadOptions={loadOptions}
@@ -132,7 +132,7 @@ export default function AgregarGiroModal({ isOpen, onClose, girosYaAgregados = [
             noOptionsMessage={({ inputValue }) =>
               !inputValue || inputValue.trim().length < 1
                 ? 'Ingrese al menos 1 caracter'
-                : 'No se encontraron giros'
+                : 'No se encontraron actividades'
             }
             loadingMessage={() => 'Buscando...'}
             formatOptionLabel={formatOptionLabel}
@@ -165,7 +165,7 @@ export default function AgregarGiroModal({ isOpen, onClose, girosYaAgregados = [
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
-          Agregar giro
+          Agregar actividad
         </button>
       </ModalFooter>
 

@@ -184,7 +184,7 @@ function CardEstablecimiento({ licencia }) {
 
       <div className="space-y-4">
         <Campo etiqueta="Nombre comercial"    valor={licencia.nombre_comercial} />
-        <Campo etiqueta="Actividad económica" valor={licencia.actividad} />
+        <Campo etiqueta="Giro comercial" valor={licencia.actividad} />
         <Campo etiqueta="Dirección del local" valor={licencia.direccion} />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -206,7 +206,7 @@ function CardGiros({ giros }) {
     <div className="bg-white rounded-lg border border-gray-200 p-5">
       <div className="flex items-center gap-2 mb-4">
         <IconoGiros />
-        <h2 className="text-sm font-semibold text-gray-800">Giros autorizados</h2>
+        <h2 className="text-sm font-semibold text-gray-800">Actividades económicas</h2>
       </div>
 
       {giros.length === 0 ? (

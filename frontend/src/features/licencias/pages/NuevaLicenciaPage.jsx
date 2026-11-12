@@ -244,7 +244,7 @@ export default function NuevaLicenciaPage() {
     if (!titular)          { toast.error('Seleccione el titular de la licencia');      return }
     if (!representante)    { toast.error('Seleccione el representante legal');         return }
     if (!nombreComercial)  { toast.error('Ingrese el nombre comercial');               return }
-    if (!actividad)        { toast.error('Ingrese la actividad económica');            return }
+    if (!actividad)        { toast.error('Ingrese el giro autorizado');            return }
     if (!direccion)        { toast.error('Ingrese la dirección del local');            return }
     if (!zonificacionId)   { toast.error('Seleccione la zonificación');               return }
     if (!area)             { toast.error('Ingrese el área del establecimiento');       return }
@@ -584,7 +584,7 @@ export default function NuevaLicenciaPage() {
 
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1.5">
-                    Actividad económica <span className="text-danger">*</span>
+                    Giro autorizado <span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
@@ -648,7 +648,7 @@ export default function NuevaLicenciaPage() {
             </SeccionCard>
 
             {/* ── Giros autorizados ─────────────────────────────────────── */}
-            <SeccionCard icono={IconoGiros} titulo="Giros autorizados">
+            <SeccionCard icono={IconoGiros} titulo="Actividades económicas">
               <div className="space-y-3">
 
                 {/* Botón añadir */}
@@ -662,7 +662,7 @@ export default function NuevaLicenciaPage() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
-                    Añadir giro
+                    Añadir actividad
                   </button>
                 </div>
 

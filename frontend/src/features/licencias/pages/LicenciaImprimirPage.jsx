@@ -313,8 +313,8 @@ const LicenciaImprimirPage = () => {
                 valor={`${formatHora12(licencia.hora_desde)} A ${formatHora12(licencia.hora_hasta)}`}
               />
               <CampoFormulario etiqueta="NOMBRE COMERCIAL" valor={(licencia.nombre_comercial || '').toUpperCase()} />
-              <CampoFormulario etiqueta="GIRO COMERCIAL" valor={girosTexto} />
-              <CampoFormulario etiqueta="ACTIVIDAD" valor={(licencia.actividad || '').toUpperCase()} />
+              <CampoFormulario etiqueta="GIRO COMERCIAL" valor={(licencia.actividad || '').toUpperCase()} />
+              <CampoFormulario etiqueta="ACTIVIDAD" valor={girosTexto}  />
 
               {/* Nivel de riesgo + tipo letrero en la misma línea */}
               <div style={{
