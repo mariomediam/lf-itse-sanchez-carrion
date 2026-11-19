@@ -70,11 +70,11 @@ export default function GirosPage() {
 
         <main className="flex-1 overflow-y-auto p-6">
           <ExpedienteHeader
-            titulo="Giros"
-            subtitulo="Gestione los giros comerciales registrados en el sistema"
+            titulo="Actividades"
+            subtitulo="Gestione las actividades comerciales registradas en el sistema"
             onActualizar={handleActualizar}
             onAgregar={() => setModalAgregar(true)}
-            labelAgregar="Agregar giro"
+            labelAgregar="Agregar actividad"
           />
 
           {/* Buscador */}
@@ -102,7 +102,7 @@ export default function GirosPage() {
                 </svg>
                 <p className="text-sm font-medium text-gray-700">
                   {giros.length}{' '}
-                  {giros.length === 1 ? 'giro encontrado' : 'giros encontrados'}
+                  {giros.length === 1 ? 'actividad encontrada' : 'actividades encontradas'}
                 </p>
               </div>
 

@@ -2780,7 +2780,7 @@ class GiroDetailView(APIView):
 
         except ProtectedError:
             return Response(
-                {'error': 'No se puede eliminar: el giro está asignado a licencias o certificados ITSE.'},
+                {'error': 'No se puede eliminar: la actividad está asignada a licencias o certificados ITSE.'},
                 status=status.HTTP_409_CONFLICT,
             )
 

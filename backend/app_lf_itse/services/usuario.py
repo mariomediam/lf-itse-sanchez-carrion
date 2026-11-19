@@ -207,7 +207,7 @@ def construir_menu_usuario(usuario_id: int) -> list[dict]:
                 },
                 {
                     'id': 'catalogos-giros',
-                    'label': 'Giros',
+                    'label': 'Actividades',
                     'url': '/catalogos/giros',
                     'submenues': [],
                 },

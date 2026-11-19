@@ -129,8 +129,14 @@ function LicenciaCard({ lic }) {
           )}
           {lic.giro_concatenado && (
             <div className="mt-1">
-              <p className="text-xs font-medium text-gray-500 mb-0.5">Giros</p>
+              <p className="text-xs font-medium text-gray-500 mb-0.5">Actividad</p>
               <p className="text-xs text-gray-700 leading-snug">{lic.giro_concatenado}</p>
+            </div>
+          )}
+          {lic.actividad && (
+            <div className="mt-1">
+              <p className="text-xs font-medium text-gray-500 mb-0.5">Giro</p>
+              <p className="text-xs text-gray-700 leading-snug">{lic.actividad }</p>
             </div>
           )}
         </div>
@@ -293,9 +299,9 @@ function FiltrosAvanzados({ filtros, onChange, nivelesRiesgo, zonificaciones }) 
               onChange={onChange} placeholder="Jr., Av., calle..." className={inputCls} />
           </div>
           <div>
-            <label className={lbl}>Giro</label>
+            <label className={lbl}>Actividad</label>
             <input type="text" name="giro_nombre" value={filtros.giro_nombre}
-              onChange={onChange} placeholder="Nombre del giro..." className={inputCls} />
+              onChange={onChange} placeholder="Nombre de la actividad..." className={inputCls} />
           </div>
         </div>
       ),

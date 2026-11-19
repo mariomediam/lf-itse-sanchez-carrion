@@ -66,7 +66,7 @@ export default function EliminarGiroModal({ isOpen, onClose, onSuccess, giro }) 
             </svg>
           </span>
           <span className="text-base font-semibold text-gray-800">
-            Eliminar giro
+            Eliminar actividad
           </span>
         </div>
       </ModalHeader>
@@ -92,7 +92,7 @@ export default function EliminarGiroModal({ isOpen, onClose, onSuccess, giro }) 
           <div className="text-sm text-red-700 space-y-1">
             <p className="font-semibold">Esta acción es irreversible.</p>
             <p>
-              No se podrá eliminar si el giro está asignado a licencias de
+              No se podrá eliminar si la actividad está asignada a licencias de
               funcionamiento o certificados ITSE.
             </p>
           </div>
@@ -129,7 +129,7 @@ export default function EliminarGiroModal({ isOpen, onClose, onSuccess, giro }) 
           ) : (
             <IconoEliminar />
           )}
-          {isSubmitting ? 'Eliminando...' : 'Sí, eliminar giro'}
+          {isSubmitting ? 'Eliminando...' : 'Sí, eliminar actividad'}
         </button>
       </ModalFooter>
     </Modal>

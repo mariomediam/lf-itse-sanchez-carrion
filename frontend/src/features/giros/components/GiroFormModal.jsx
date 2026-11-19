@@ -109,7 +109,7 @@ export default function GiroFormModal({ isOpen, onClose, onSuccess, giro = null 
       } else {
         await girosApi.crear(body)
       }
-      toast.success(esEdicion ? 'Giro actualizado correctamente' : 'Giro creado correctamente')
+      toast.success(esEdicion ? 'Actividad actualizada correctamente' : 'Actividad creada correctamente')
       onSuccess?.()
       handleClose()
     } catch (err) {
@@ -139,7 +139,7 @@ export default function GiroFormModal({ isOpen, onClose, onSuccess, giro = null 
             </svg>
           </span>
           <span className="text-base font-semibold text-gray-800">
-            {esEdicion ? 'Modificar giro' : 'Agregar giro'}
+            {esEdicion ? 'Modificar actividad' : 'Agregar actividad'}
           </span>
         </div>
       </ModalHeader>
@@ -157,7 +157,7 @@ export default function GiroFormModal({ isOpen, onClose, onSuccess, giro = null 
             name="nombre"
             value={formData.nombre}
             onChange={handleChange}
-            placeholder="Descripción del giro comercial"
+            placeholder="Descripción de la actividad comercial"
             className={inputClass}
             maxLength={200}
           />
@@ -192,7 +192,7 @@ export default function GiroFormModal({ isOpen, onClose, onSuccess, giro = null 
                        focus:ring-2 focus:ring-primary/30 cursor-pointer"
           />
           <label htmlFor="esta_activo" className="text-sm text-gray-700 cursor-pointer select-none">
-            Giro activo
+            Actividad activa
           </label>
         </div>
 
@@ -224,7 +224,7 @@ export default function GiroFormModal({ isOpen, onClose, onSuccess, giro = null 
           ) : (
             <IconoGuardar />
           )}
-          {isSubmitting ? 'Guardando...' : 'Guardar giro'}
+          {isSubmitting ? 'Guardando...' : 'Guardar actividad'}
         </button>
       </ModalFooter>
     </Modal>
